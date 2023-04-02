@@ -1,10 +1,12 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from processer.dart import DartProcesser
+from bot.discord.webhook import DiscordWebhook
 
 class DartScheduler():
     def __init__(self):
         self.dart_parser = DartProcesser()
+        self.discord_webhook = DiscordWebhook()
 
         self.init_data = self.dart_parser.parsing_all_data() 
 
@@ -15,6 +17,7 @@ class DartScheduler():
         if len(bonus_issue_data) > 0 :
             for data in bonus_issue_data :
                 print(f"[{data['dc_creator']}] : 무상증자 알림 -> <참고> {data['link']}")
+                self.discord_webhook.send_message(f"[{data['dc_creator']}] : 무상증자 알림 -> <참고> {data['link']}")
         else :
             print("무상증자 알림 없음")
 
